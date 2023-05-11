@@ -3,7 +3,13 @@
 # Compiler and linker flags
 CXX := clang++
 CXXFLAGS := -std=c++17 -Wall -Wextra -Werror
-LDFLAGS := -lstdc++
+LDFLAGS := -lstdc++ -fsanitize=address
+
+SFML_INCLUDE_DIR := /usr/local/include
+SFML_LIBRARY_DIR := /usr/local/lib
+
+LDLIBS = -lsfml-graphics -lsfml-window -lsfml-system
+
 
 CLANG_FORMAT = clang-format
 CLANG_FORMAT_FLAGS = -style=google
@@ -16,6 +22,7 @@ SRCS := $(wildcard $(SRCDIR)/*.cpp)
 OBJS := $(addprefix build/,$(notdir $(SRCS:.cpp=.o)))
 EXEC := build/myapp
 
+
 .PHONY: all clean
 
 # Default target
@@ -23,14 +30,17 @@ all: $(EXEC)
 
 # Linking target
 $(EXEC): $(OBJS)
-	$(CXX) $(LDFLAGS) $^ -o $@
+	$(CXX) $(LDFLAGS) $^ -o $@ -L$(SFML_LIBRARY_DIR) $(LDLIBS)
 
 # Compilation targets
 build/%.o: $(SRCDIR)/%.cpp | build
-	$(CXX) $(CXXFLAGS) -c $< -o $@
+	$(CXX) $(CXXFLAGS) -c $< -I$(SFML_INCLUDE_DIR) -o $@
 
 build:
 	mkdir -p $@
+
+run: $(EXEC)
+	./$(EXEC)
 
 .PHONY: format
 format:

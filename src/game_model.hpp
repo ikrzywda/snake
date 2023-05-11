@@ -3,17 +3,20 @@
 
 #include <chrono>
 
-#include "board_model.hpp"
 #include "snake_model.hpp"
 
 struct GameModel {
-  GameModel(unsigned int board_width, unsigned int board_height);
+  GameModel(int board_width, int board_height);
 
-  Board board;
+  m_game_coordinates board_dimensions;
+  m_game_coordinates food_position;
   Snake snake;
-  unsigned int score;
-  unsigned int time_seconds;
-  bool has_lost;
+
+  bool is_snake_colliding_with_food();
+  bool is_snake_colliding_with_walls();
+  unsigned int score{0};
+  unsigned int time_seconds{0};
+  bool has_lost{false};
 
   std::chrono::time_point<std::chrono::system_clock> start_time;
   void update();

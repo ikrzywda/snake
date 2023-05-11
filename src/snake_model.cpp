@@ -1,5 +1,10 @@
 #include "snake_model.hpp"
 
+Snake::Snake(m_game_coordinates head, Direction direction) {
+  body.push_back(head);
+  this->direction = direction;
+}
+
 m_game_coordinates direction_to_2d_vector(Direction direction) {
   switch (direction) {
     case Direction::UP:

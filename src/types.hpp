@@ -10,13 +10,11 @@ using m_game_coordinates = std::pair<int, int>;
 
 // generated with gpt 3.5
 m_game_coordinates operator+(const m_game_coordinates& lhs,
-                             const m_game_coordinates& rhs) {
-  return {lhs.first + rhs.first, lhs.second + rhs.second};
-}
+                             const m_game_coordinates& rhs);
 
 m_game_coordinates operator-(const m_game_coordinates& lhs,
-                             const m_game_coordinates& rhs) {
-  return {lhs.first - rhs.first, lhs.second - rhs.second};
-}
+                             const m_game_coordinates& rhs);
+
+bool operator==(const m_game_coordinates& lhs, const m_game_coordinates& rhs);
 
 #endif

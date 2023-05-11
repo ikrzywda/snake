@@ -8,6 +8,8 @@
 std::pair<int, int> direction_to_2d_vector(Direction direction);
 
 struct Snake {
+  Snake(m_game_coordinates head, Direction direction);
+
   std::vector<m_game_coordinates> body;
   Direction direction;
 

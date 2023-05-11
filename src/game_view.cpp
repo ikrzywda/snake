@@ -1,11 +1,10 @@
 #include "game_view.hpp"
 
-void GameView::draw_game(sf::RenderWindow &window, GameModel &game_model) {
+void GameView::draw_game(sf::RenderWindow &window, GameModel *game_model) {
   window.clear(sf::Color::Black);
 
-  auto board = game_model.board;
-  auto snake = board.snake;
-  auto food = board.food_position;
+  auto snake = game_model->snake;
+  auto food = game_model->food_position;
 
   sf::RectangleShape rectangle(sf::Vector2f(10, 10));
   rectangle.setFillColor(sf::Color::White);
@@ -23,6 +22,6 @@ void GameView::draw_game(sf::RenderWindow &window, GameModel &game_model) {
   window.display();
 }
 
-static void draw_menu(sf::RenderWindow &window) {
-  // TODO: Implement -- click to start / quit
-}
+// static void draw_menu(sf::RenderWindow &window) {
+//   // TODO: Implement -- click to start / quit
+// }

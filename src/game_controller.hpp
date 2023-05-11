@@ -5,7 +5,6 @@
 #include <chrono>
 #include <memory>
 
-#include "board_model.hpp"
 #include "game_view.hpp"
 #include "types.hpp"
 

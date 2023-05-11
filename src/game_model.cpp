@@ -1,12 +1,9 @@
 #include "game_model.hpp"
 
-GameModel::GameModel(unsigned int board_width, unsigned int board_height)
-    : board(board_width, board_height),
-      snake(),
-      score(0),
-      time_seconds(0),
-      has_lost(false) {
-  board.spawn_food();
+GameModel::GameModel(int board_width, int board_height)
+    : snake(std::make_pair(board_width / 2, board_height / 2), Direction::UP) {
+  board_dimensions = std::make_pair(board_width, board_height);
+  spawn_food();
   start_time = std::chrono::system_clock::now();
 }
 
@@ -14,14 +11,13 @@ void GameModel::update() {
   if (has_lost) {
     return;
   }
-  board.update();
-  if (board.is_snake_colliding_with_food()) {
+  if (is_snake_colliding_with_food()) {
     score++;
   }
-  if (board.is_snake_colliding_with_itself() ||
-      board.is_snake_colliding_with_walls()) {
-    has_lost = true;
-  }
+
+  has_lost =
+      snake.is_colliding_with_itself() || is_snake_colliding_with_walls();
+
   auto now = std::chrono::system_clock::now();
   auto elapsed_seconds =
       std::chrono::duration_cast<std::chrono::seconds>(now - start_time);
@@ -31,15 +27,32 @@ void GameModel::update() {
 void GameModel::spawn_food() {
   std::vector<m_game_coordinates> available_positions;
   int available_index;
+  int board_width = board_dimensions.first;
+  int board_height = board_dimensions.second;
 
-  for (unsigned int i = 0; i < board.width * board.height; i++) {
-    unsigned int row = i / board.width;
-    unsigned int col = i % board.width;
+  for (int i = 0; i < board_width * board_height; i++) {
+    int row = i / board_width;
+    int col = i % board_width;
     if (std::find(snake.body.begin(), snake.body.end(),
                   std::make_pair(row, col)) == snake.body.end()) {
       available_positions.push_back(std::make_pair(row, col));
     }
   }
+
+  if (available_positions.empty()) {
+    return;
+  }
+
   available_index = rand() % available_positions.size();
-  board.food_position = available_positions[available_index];
+  food_position = available_positions[available_index];
+}
+
+bool GameModel::is_snake_colliding_with_food() {
+  return snake.body.front() == food_position;
+}
+
+bool GameModel::is_snake_colliding_with_walls() {
+  auto head = snake.body.front();
+  return head.first < 0 || head.first >= board_dimensions.first ||
+         head.second < 0 || head.second >= board_dimensions.second;
 }
