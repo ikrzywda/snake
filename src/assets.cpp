@@ -1,37 +1,66 @@
 #include "assets.hpp"
 
-// generated with gpt 3.5
-
-sf::RectangleShape Tileset::get_board_tile(sf::Vector2f position, sf::Vector2f size, sf::Color color) {
-    sf::RectangleShape tile(size);
-    tile.setPosition(position);
-    tile.setFillColor(color);
-    return tile;
+sf::Sprite SnakeAssets::get_board_tile(sf::Texture& texture,
+                                       sf::Vector2f position,
+                                       sf::Vector2f size) {
+  sf::Sprite tile(texture);
+  tile.setPosition(position);
+  tile.setScale(size.x / tile.getLocalBounds().width,
+                size.y / tile.getLocalBounds().height);
+  return tile;
 }
 
-
-sf::RectangleShape Tileset::get_snake_body(sf::Vector2f position, sf::Vector2f size, sf::Color color) {
-    sf::RectangleShape tile(size);
-    tile.setPosition(position);
-    tile.setFillColor(color);
-    return tile;
+sf::Sprite SnakeAssets::get_snake_body(sf::Texture& texture,
+                                       sf::Vector2f position,
+                                       sf::Vector2f size) {
+  sf::Sprite tile(texture);
+  tile.setPosition(position);
+  tile.setScale(size.x / tile.getLocalBounds().width,
+                size.y / tile.getLocalBounds().height);
+  return tile;
 }
 
-
-sf::ConvexShape Tileset::get_snake_head(sf::Vector2f position, sf::Vector2f size, sf::Color color) {
-    sf::ConvexShape tile(3);
-    tile.setPoint(0, sf::Vector2f(0, 0));
-    tile.setPoint(1, sf::Vector2f(size.x, 0));
-    tile.setPoint(2, sf::Vector2f(size.x / 2, size.y));
-    tile.setPosition(position);
-    tile.setFillColor(color);
-    return tile;
+sf::Sprite SnakeAssets::get_snake_head(sf::Texture& texture,
+                                       sf::Vector2f position,
+                                       sf::Vector2f size) {
+  sf::Sprite tile(texture);
+  tile.setPosition(position);
+  tile.setScale(size.x / tile.getLocalBounds().width,
+                size.y / tile.getLocalBounds().height);
+  return tile;
 }
 
+sf::Sprite SnakeAssets::get_fruit(sf::Texture& texture, sf::Vector2f position,
+                                  sf::Vector2f size) {
+  sf::Sprite tile(texture);
+  tile.setPosition(position);
+  tile.setScale(size.x / tile.getLocalBounds().width,
+                size.y / tile.getLocalBounds().height);
+  return tile;
+}
 
-sf::CircleShape Tileset::get_fruit(sf::Vector2f position, float radius, sf::Color color) {
-    sf::CircleShape tile(radius);
-    tile.setPosition(position);
-    tile.setFillColor(color);
-    return tile;
+std::optional<sf::Sprite> SnakeAssets::sprite_factory(
+    TileDescriptors descriptor, sf::Texture& texture, sf::Vector2f position,
+    sf::Vector2f size) {
+  switch (descriptor) {
+    case TileDescriptors::BOARD_TILE:
+      return std::make_optional<sf::Sprite>(
+          get_board_tile(texture, position, size));
+    case TileDescriptors::SNAKE_BODY:
+      return std::make_optional<sf::Sprite>(
+          get_snake_body(texture, position, size));
+    case TileDescriptors::SNAKE_HEAD:
+      return std::make_optional<sf::Sprite>(
+          get_snake_head(texture, position, size));
+    case TileDescriptors::FRUIT:
+      return std::make_optional<sf::Sprite>(get_fruit(texture, position, size));
+    default:
+      return std::nullopt;
+  }
+}
+
+sf::Font SnakeAssets::get_font() {
+  sf::Font font;
+  font.loadFromFile("assets/arial.ttf");
+  return font;
 }

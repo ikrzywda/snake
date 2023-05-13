@@ -4,12 +4,14 @@
 #include <SFML/Graphics.hpp>
 #include <chrono>
 #include <memory>
+#include <optional>
 
 #include "game_view.hpp"
 #include "types.hpp"
 
 struct GameController {
   std::unique_ptr<GameModel> game_model;
+  std::unique_ptr<GameDrawingBuffer> game_drawing_buffer;
   sf::RenderWindow &window;
   GameState state{GameState::MENU};
   Direction direction{Direction::RIGHT};
