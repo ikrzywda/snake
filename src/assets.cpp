@@ -6,6 +6,8 @@ sf::RectangleShape SnakeAssets::get_board_tile(sf::Vector2f position,
   sf::RectangleShape tile(size);
   tile.setPosition(position);
   tile.setFillColor(color);
+  tile.setOutlineThickness(-2.f);
+  tile.setOutlineColor(sf::Color(30, 30, 30));
   return tile;
 }
 

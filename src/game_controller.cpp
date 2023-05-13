@@ -29,7 +29,6 @@ void GameController::update() {
     case GameState::MENU:
       break;
     case GameState::PLAYING:
-      handle_input();
       game_model->snake.move(direction);
       if (game_model->is_snake_colliding_with_food()) {
         game_model->snake.grow();
@@ -50,11 +49,17 @@ void GameController::tick() {
   auto now = std::chrono::system_clock::now();
   auto elapsed =
       std::chrono::duration_cast<std::chrono::milliseconds>(now - last_tick);
+  auto elapsed_input = std::chrono::duration_cast<std::chrono::milliseconds>(
+      now - last_input_tick);
   if (elapsed.count() > 300) {
     last_tick = now;
     update();
     DrawingService::update_drawing_buffer(game_drawing_buffer.get(),
                                           game_model.get());
     DrawingService::draw_game(window, game_drawing_buffer.get());
+  }
+  if (elapsed_input.count() > 100) {
+    last_input_tick = now;
+    handle_input();
   }
 }

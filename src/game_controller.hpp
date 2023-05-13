@@ -17,6 +17,7 @@ struct GameController {
   Direction direction{Direction::RIGHT};
 
   std::chrono::time_point<std::chrono::system_clock> last_tick;
+  std::chrono::time_point<std::chrono::system_clock> last_input_tick;
 
   GameController(sf::RenderWindow &window);
   void start_game();

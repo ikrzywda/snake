@@ -54,27 +54,34 @@ void DrawingService::draw_header(sf::RenderWindow &window,
 void DrawingService::draw_board(sf::RenderWindow &window,
                                 m_game_coordinates board_dimensions,
                                 std::vector<TileDescriptors> tiles) {
-  sf::RectangleShape board(sf::Vector2f(
-      window.getSize().x, window.getSize().y * BOARD_HEIGHT_PERCENTAGE));
+  float max_board_height = window.getSize().y * BOARD_HEIGHT_PERCENTAGE;
+  float max_board_width =
+      max_board_height * board_dimensions.first / board_dimensions.second;
+  float board_left = (window.getSize().x - max_board_width) / 2.0f;
+  sf::RectangleShape board(sf::Vector2f(max_board_width, max_board_height));
   board.setPosition(
-      sf::Vector2f(0, window.getSize().y * HEADER_HEIGHT_PERCENTAGE));
+      sf::Vector2f(board_left, window.getSize().y * HEADER_HEIGHT_PERCENTAGE));
   board.setFillColor(sf::Color::White);
   window.draw(board);
 
-  auto [board_width, board_height] = board_dimensions;
-  sf::Vector2f tile_size(board.getSize().x / board_width,
-                         board.getSize().y / board_height);
-  sf::Vector2f tile_position(0, window.getSize().y * HEADER_HEIGHT_PERCENTAGE);
+  float tile_size = std::min(max_board_width / board_dimensions.first,
+                             max_board_height / board_dimensions.second);
+  sf::Vector2f tile_dimensions(tile_size, tile_size);
+  sf::Vector2f tile_position(
+      board_left,
+      window.getSize().y * HEADER_HEIGHT_PERCENTAGE +
+          (max_board_height - tile_size * board_dimensions.second) / 2.0f);
 
   for (auto tile : tiles) {
-    auto shape = SnakeAssets::shape_factory(tile, tile_position, tile_size);
+    auto shape =
+        SnakeAssets::shape_factory(tile, tile_position, tile_dimensions);
     if (shape != nullptr) {
       window.draw(*shape);
     }
-    tile_position.x += tile_size.x;
-    if (tile_position.x >= board.getSize().x) {
-      tile_position.x = 0;
-      tile_position.y += tile_size.y;
+    tile_position.x += tile_size;
+    if (tile_position.x >= board_left + max_board_width) {
+      tile_position.x = board_left;
+      tile_position.y += tile_size;
     }
   }
 }
