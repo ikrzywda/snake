@@ -13,6 +13,8 @@ void GameModel::update() {
   }
   if (is_snake_colliding_with_food()) {
     score++;
+    snake.grow();
+    spawn_food();
   }
 
   has_lost =

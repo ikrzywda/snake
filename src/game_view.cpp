@@ -35,20 +35,23 @@ void DrawingService::draw_header(sf::RenderWindow &window,
   sf::RectangleShape header(sf::Vector2f(
       window.getSize().x, window.getSize().y * HEADER_HEIGHT_PERCENTAGE));
   header.setFillColor(sf::Color::Black);
-  // add text to header for time and score
+
   sf::Font font = SnakeAssets::get_font();
-  sf::Text time_text(time_string, font);
-  time_text.setCharacterSize(24);
+
+  sf::Text time_text(time_string, font, 24);
   time_text.setFillColor(sf::Color::White);
-  time_text.setPosition(sf::Vector2f(0, 0));
-  sf::Text score_text(score_string, font);
-  score_text.setCharacterSize(24);
+  time_text.setPosition(sf::Vector2f(
+      10, header.getSize().y / 2 - time_text.getLocalBounds().height / 2));
+
+  sf::Text score_text(score_string, font, 24);
   score_text.setFillColor(sf::Color::White);
-  score_text.setPosition(sf::Vector2f(0, 24));
-  window.draw(time_text);
-  window.draw(score_text);
+  score_text.setPosition(sf::Vector2f(
+      header.getSize().x - score_text.getLocalBounds().width - 10,
+      header.getSize().y / 2 - score_text.getLocalBounds().height / 2));
 
   window.draw(header);
+  window.draw(time_text);
+  window.draw(score_text);
 }
 
 void DrawingService::draw_board(sf::RenderWindow &window,

@@ -30,13 +30,9 @@ void GameController::update() {
       break;
     case GameState::PLAYING:
       game_model->snake.move(direction);
-      if (game_model->is_snake_colliding_with_food()) {
-        game_model->snake.grow();
-        game_model->spawn_food();
-        game_model->score++;
-      }
-      if (game_model->is_snake_colliding_with_walls() ||
-          game_model->snake.is_colliding_with_itself()) {
+      game_model->update();
+
+      if (game_model->has_lost) {
         state = GameState::GAME_OVER;
       }
       break;
@@ -58,7 +54,7 @@ void GameController::tick() {
                                           game_model.get());
     DrawingService::draw_game(window, game_drawing_buffer.get());
   }
-  if (elapsed_input.count() > 100) {
+  if (elapsed_input.count() > 20) {
     last_input_tick = now;
     handle_input();
   }
