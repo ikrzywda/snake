@@ -18,7 +18,8 @@ void GameController::handle_input() {
 
 void GameController::start_game() {
   game_model = std::make_unique<GameModel>(20, 20);
-  game_drawing_buffer = std::make_unique<GameDrawingBuffer>(20, 20);
+  game_drawing_buffer =
+      std::make_unique<GameDrawingBuffer>(m_game_coordinates(20, 20));
   game_model->spawn_food();
   state = GameState::PLAYING;
 }
@@ -49,7 +50,7 @@ void GameController::tick() {
   auto now = std::chrono::system_clock::now();
   auto elapsed =
       std::chrono::duration_cast<std::chrono::milliseconds>(now - last_tick);
-  if (elapsed.count() > 100) {
+  if (elapsed.count() > 300) {
     last_tick = now;
     update();
     DrawingService::update_drawing_buffer(game_drawing_buffer.get(),
