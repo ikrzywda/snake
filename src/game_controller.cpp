@@ -13,6 +13,10 @@ void GameController::handle_input() {
     update_direction(Direction::UP);
   } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::J)) {
     update_direction(Direction::DOWN);
+  } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter)) {
+    if (state == GameState::MENU) {
+      start_game();
+    }
   }
 }
 
@@ -37,6 +41,7 @@ void GameController::start_game() {
 void GameController::update() {
   switch (state) {
     case GameState::MENU:
+      DrawingService::draw_menu(window);
       break;
     case GameState::PLAYING:
       game_model->snake.move(direction);
@@ -45,6 +50,9 @@ void GameController::update() {
       if (game_model->has_lost) {
         state = GameState::GAME_OVER;
       }
+      DrawingService::update_drawing_buffer(game_drawing_buffer.get(),
+                                            game_model.get());
+      DrawingService::draw_game(window, game_drawing_buffer.get());
       break;
     case GameState::GAME_OVER:
       break;
@@ -60,9 +68,6 @@ void GameController::tick() {
   if (elapsed.count() > 300) {
     last_tick = now;
     update();
-    DrawingService::update_drawing_buffer(game_drawing_buffer.get(),
-                                          game_model.get());
-    DrawingService::draw_game(window, game_drawing_buffer.get());
   }
   if (elapsed_input.count() > 20) {
     last_input_tick = now;

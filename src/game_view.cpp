@@ -97,6 +97,36 @@ void DrawingService::draw_game(sf::RenderWindow &window,
   window.display();
 }
 
-// static void draw_menu(sf::RenderWindow &window) {
-//   // TODO: Implement -- click to start / quit
-// }
+// generated with gpt-3.5
+void DrawingService::draw_menu(sf::RenderWindow &window) {
+  sf::Font font = SnakeAssets::get_font();
+
+  sf::Text title("Snake", font, 48);
+  title.setFillColor(sf::Color::White);
+  title.setStyle(sf::Text::Bold);
+  title.setPosition(sf::Vector2f(
+      window.getSize().x / 2 - title.getGlobalBounds().width / 2, 100));
+
+  sf::Text instructions(
+      "Press Enter to start game\n\nUse HJKL for movement\n\nPress Esc to quit",
+      font, 32);
+  instructions.setFillColor(sf::Color::White);
+  instructions.setPosition(sf::Vector2f(
+      window.getSize().x / 2 - instructions.getGlobalBounds().width / 2, 300));
+
+  instructions.setLineSpacing(1.5);
+  instructions.setFillColor(sf::Color::White);
+  instructions.setOutlineColor(sf::Color::Black);
+  instructions.setOutlineThickness(2);
+  instructions.setCharacterSize(32);
+  instructions.setStyle(sf::Text::Regular);
+  instructions.setOrigin(
+      sf::Vector2f(instructions.getLocalBounds().width / 2.f, 0));
+  instructions.setPosition(
+      sf::Vector2f(sf::Vector2f(window.getSize().x / 2.f, 400)));
+
+  window.clear(sf::Color::Black);
+  window.draw(title);
+  window.draw(instructions);
+  window.display();
+}

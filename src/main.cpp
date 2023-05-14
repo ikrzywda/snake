@@ -5,7 +5,7 @@
 int main() {
   sf::RenderWindow window(sf::VideoMode(sf::Vector2u(800, 600)), "Snake");
   GameController game_controller(window);
-  game_controller.start_game();
+  // game_controller.start_game();
 
   while (window.isOpen()) {
     sf::Event event;
