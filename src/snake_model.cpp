@@ -27,8 +27,16 @@ void Snake::move(Direction direction) {
 }
 
 void Snake::grow() {
-  m_game_coordinates tail = body.back();
-  m_game_coordinates direction_vector = direction_to_2d_vector(direction);
+  m_game_coordinates tail, direction_vector;
+  if (body.size() == 1) {
+    tail = body.back();
+    direction_vector = direction_to_2d_vector(direction);
+    tail = tail - direction_vector;
+    body.push_back(tail);
+    return;
+  }
+  tail = body.back();
+  direction_vector = body[body.size() - 2] - tail;
   tail = tail - direction_vector;
   body.push_back(tail);
 }

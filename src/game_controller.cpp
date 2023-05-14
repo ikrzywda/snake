@@ -6,13 +6,23 @@ GameController::GameController(sf::RenderWindow &window) : window(window) {
 
 void GameController::handle_input() {
   if (sf::Keyboard::isKeyPressed(sf::Keyboard::H)) {
-    direction = Direction::LEFT;
+    update_direction(Direction::LEFT);
   } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::L)) {
-    direction = Direction::RIGHT;
+    update_direction(Direction::RIGHT);
   } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::K)) {
-    direction = Direction::UP;
+    update_direction(Direction::UP);
   } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::J)) {
-    direction = Direction::DOWN;
+    update_direction(Direction::DOWN);
+  }
+}
+
+void GameController::update_direction(Direction new_direction) {
+  m_game_coordinates current_direction_vector =
+      SnakeService::direction_to_2d_vector(direction);
+  m_game_coordinates new_direction_vector =
+      SnakeService::direction_to_2d_vector(new_direction);
+  if (current_direction_vector + new_direction_vector != std::make_pair(0, 0)) {
+    direction = new_direction;
   }
 }
 

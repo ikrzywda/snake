@@ -7,6 +7,7 @@
 #include <optional>
 
 #include "game_view.hpp"
+#include "snake_service.hpp"
 #include "types.hpp"
 
 struct GameController {
@@ -20,6 +21,7 @@ struct GameController {
   std::chrono::time_point<std::chrono::system_clock> last_input_tick;
 
   GameController(sf::RenderWindow &window);
+  void update_direction(Direction direction);
   void start_game();
   void handle_input();
   void update();
