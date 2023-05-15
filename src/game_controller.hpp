@@ -26,7 +26,6 @@ struct GameController {
   void handle_input();
   void update();
   void tick();
-  void run();
 };
 
 #endif
