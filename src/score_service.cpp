@@ -16,6 +16,17 @@ std::optional<ScoreModel> ScoreService::deserialize_score(
   }
 }
 
+bool ScoreService::init() {
+  std::cout << "DUPA " << ScoreService::SCORE_FILE_PATH << std::endl;
+  std::ofstream score_file{ScoreService::SCORE_FILE_PATH,
+                           std::ios::out | std::ios::trunc};
+  if (!score_file.is_open()) {
+    return false;
+  }
+  score_file.close();
+  return true;
+}
+
 std::vector<ScoreModel> ScoreService::get_scores() {
   std::ifstream score_file{ScoreService::SCORE_FILE_PATH};
   std::string line;
@@ -49,19 +60,21 @@ bool ScoreService::write_scores(std::vector<ScoreModel> scores) {
   return true;
 }
 
-std::vector<ScoreModel> ScoreService::update_scoreboard(ScoreModel new_score) {
-  std::vector<ScoreModel> scores = get_scores();
-
-  if (scores.empty()) {
-    return {};
-  }
-
+bool ScoreService::update_scoreboard(std::vector<ScoreModel> &scores,
+                                     ScoreModel new_score) {
   scores.push_back(new_score);
   std::sort(scores.begin(), scores.end(),
             [](ScoreModel a, ScoreModel b) { return a.score > b.score; });
   if (scores.size() > ScoreService::MAX_SCORES) {
     scores.pop_back();
   }
+  return write_scores(scores);
+}
 
-  return scores;
+std::string ScoreService::scores_to_string(std::vector<ScoreModel> scores) {
+  std::string scores_string = "";
+  for (auto score : scores) {
+    scores_string += score.serialize_to_string() + '\n';
+  }
+  return scores_string;
 }

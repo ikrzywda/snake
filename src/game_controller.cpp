@@ -16,6 +16,8 @@ void GameController::handle_input() {
   } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter)) {
     if (state == GameState::MENU) {
       start_game();
+    } else if (state == GameState::GAME_OVER) {
+      state = GameState::MENU;
     }
   }
 }
@@ -40,11 +42,14 @@ void GameController::start_game() {
 
 void GameController::finish_game() {
   state = GameState::GAME_OVER;
-  std::vector<ScoreModel> current_scoreboard =
-      ScoreService::update_scoreboard(ScoreModel{
-          game_model->score, ConversionService::chrono_timestamp_to_string(
-                                 std::chrono::system_clock::now())});
-  DrawingService::draw_game_over(window, "dupa dupa2");
+  std::vector<ScoreModel> current_scoreboard = ScoreService::get_scores();
+  ScoreService::update_scoreboard(
+      current_scoreboard,
+      ScoreModel{game_model->score,
+                 ConversionService::chrono_timestamp_to_string(
+                     std::chrono::system_clock::now())});
+  DrawingService::draw_game_over(
+      window, ScoreService::scores_to_string(current_scoreboard));
 }
 
 void GameController::update() {
@@ -57,18 +62,15 @@ void GameController::update() {
       game_model->update();
 
       if (game_model->has_lost) {
-        state = GameState::GAME_OVER;
+        finish_game();
+        break;
       }
       DrawingService::update_drawing_buffer(game_drawing_buffer.get(),
                                             game_model.get());
       DrawingService::draw_game(window, game_drawing_buffer.get());
       break;
     case GameState::GAME_OVER:
-      std::vector<ScoreModel> current_scoreboard =
-          ScoreService::update_scoreboard(ScoreModel{
-              game_model->score, ConversionService::chrono_timestamp_to_string(
-                                     std::chrono::system_clock::now())});
-      DrawingService::draw_game_over(window, "dupa dupa2");
+
       break;
   }
 }

@@ -3,6 +3,11 @@
 #include "game_controller.hpp"
 
 int main() {
+  if (!ScoreService::init()) {
+    std::cout << "Failed to initialize score service" << std::endl;
+    return 1;
+  }
+
   sf::RenderWindow window(sf::VideoMode(sf::Vector2u(800, 600)), "Snake");
   GameController game_controller(window);
   // game_controller.start_game();
