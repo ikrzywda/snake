@@ -1,6 +1,7 @@
 #ifndef TYPES_HPP
 #define TYPES_HPP
 
+#include <string>
 #include <utility>
 
 enum class Direction { UP, DOWN, LEFT, RIGHT };
@@ -16,5 +17,13 @@ m_game_coordinates operator-(const m_game_coordinates& lhs,
                              const m_game_coordinates& rhs);
 
 bool operator==(const m_game_coordinates& lhs, const m_game_coordinates& rhs);
+
+struct ScoreModel {
+  unsigned int score{0};
+  std::string score_time_string{""};
+
+  std::string serialize_to_string();
+  ScoreModel() = default;
+};
 
 #endif

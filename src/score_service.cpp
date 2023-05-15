@@ -1,9 +1,5 @@
 #include "score_service.hpp"
 
-std::string ScoreModel::serialize_to_string() {
-  return std::to_string(score) + " " + score_time_string + " ";
-}
-
 std::optional<ScoreModel> ScoreService::deserialize_score(
     std::string score_string) {
   try {
@@ -53,11 +49,11 @@ bool ScoreService::write_scores(std::vector<ScoreModel> scores) {
   return true;
 }
 
-bool ScoreService::insert_score(ScoreModel new_score) {
-  std::vector<ScoreModel> scores;
-  auto scores_opt = get_scores();
-  if (scores_opt.empty()) {
-    return false;
+std::vector<ScoreModel> ScoreService::update_scoreboard(ScoreModel new_score) {
+  std::vector<ScoreModel> scores = get_scores();
+
+  if (scores.empty()) {
+    return {};
   }
 
   scores.push_back(new_score);
@@ -67,5 +63,5 @@ bool ScoreService::insert_score(ScoreModel new_score) {
     scores.pop_back();
   }
 
-  return write_scores(scores);
+  return scores;
 }

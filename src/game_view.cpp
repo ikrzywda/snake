@@ -130,3 +130,56 @@ void DrawingService::draw_menu(sf::RenderWindow &window) {
   window.draw(instructions);
   window.display();
 }
+
+// generated with gpt-3.5
+void DrawingService::draw_game_over(sf::RenderWindow &window,
+                                    std::string score_string) {
+  sf::View view = window.getDefaultView();
+
+  sf::Vector2f windowCenter(window.getSize().x / 2.0f,
+                            window.getSize().y / 2.0f);
+  view.setCenter(windowCenter);
+
+  float relativeFontSize = window.getSize().y * 0.05f;
+  float relativeSpacing = window.getSize().y * 0.02f;
+
+  sf::Font font = SnakeAssets::get_font();
+  sf::Text scoresText;
+  scoresText.setFont(font);
+  scoresText.setCharacterSize(relativeFontSize);
+  scoresText.setFillColor(sf::Color::White);
+
+  std::istringstream iss(score_string);
+  std::string line;
+  std::string scoresDisplay;
+  while (std::getline(iss, line)) {
+    scoresDisplay += line + "\n";
+  }
+
+  scoresText.setString(scoresDisplay);
+
+  sf::FloatRect textBounds = scoresText.getLocalBounds();
+  scoresText.setOrigin(sf::Vector2f(textBounds.left + textBounds.width / 2.0f,
+                                    textBounds.top + textBounds.height / 2.0f));
+  scoresText.setPosition(windowCenter);
+
+  sf::Text promptText;
+  promptText.setFont(font);
+  promptText.setCharacterSize(relativeFontSize);
+  promptText.setFillColor(sf::Color::White);
+  promptText.setString("Press Enter to continue");
+
+  sf::FloatRect promptBounds = promptText.getLocalBounds();
+  promptText.setOrigin(
+      sf::Vector2f(promptBounds.left + promptBounds.width / 2.0f,
+                   promptBounds.top + promptBounds.height / 2.0f));
+  promptText.setPosition(
+      sf::Vector2f(windowCenter.x, windowCenter.y + relativeSpacing * 2));
+
+  window.clear();
+  window.setView(view);
+  window.draw(scoresText);
+  window.draw(promptText);
+
+  window.display();
+}

@@ -2,6 +2,7 @@
 #define GAME_VIEW_HPP
 
 #include <SFML/Graphics.hpp>
+#include <sstream>
 
 #include "assets.hpp"
 #include "game_model.hpp"
@@ -22,7 +23,8 @@ struct DrawingService {
   static void draw_game(sf::RenderWindow &window,
                         GameDrawingBuffer *draw_game_in);
   static void draw_menu(sf::RenderWindow &window);
-  static void draw_game_over(sf::RenderWindow &window);
+  static void draw_game_over(sf::RenderWindow &window,
+                             std::string scores_string);
 
  private:
   static void draw_header(sf::RenderWindow &window, std::string time_string,

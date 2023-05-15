@@ -22,9 +22,9 @@ void GameController::handle_input() {
 
 void GameController::update_direction(Direction new_direction) {
   m_game_coordinates current_direction_vector =
-      SnakeService::direction_to_2d_vector(direction);
+      ConversionService::direction_to_2d_vector(direction);
   m_game_coordinates new_direction_vector =
-      SnakeService::direction_to_2d_vector(new_direction);
+      ConversionService::direction_to_2d_vector(new_direction);
   if (current_direction_vector + new_direction_vector != std::make_pair(0, 0)) {
     direction = new_direction;
   }
@@ -36,6 +36,15 @@ void GameController::start_game() {
       std::make_unique<GameDrawingBuffer>(m_game_coordinates(20, 20));
   game_model->spawn_food();
   state = GameState::PLAYING;
+}
+
+void GameController::finish_game() {
+  state = GameState::GAME_OVER;
+  std::vector<ScoreModel> current_scoreboard =
+      ScoreService::update_scoreboard(ScoreModel{
+          game_model->score, ConversionService::chrono_timestamp_to_string(
+                                 std::chrono::system_clock::now())});
+  DrawingService::draw_game_over(window, "dupa dupa2");
 }
 
 void GameController::update() {
@@ -55,6 +64,11 @@ void GameController::update() {
       DrawingService::draw_game(window, game_drawing_buffer.get());
       break;
     case GameState::GAME_OVER:
+      std::vector<ScoreModel> current_scoreboard =
+          ScoreService::update_scoreboard(ScoreModel{
+              game_model->score, ConversionService::chrono_timestamp_to_string(
+                                     std::chrono::system_clock::now())});
+      DrawingService::draw_game_over(window, "dupa dupa2");
       break;
   }
 }

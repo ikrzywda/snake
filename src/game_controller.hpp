@@ -6,8 +6,9 @@
 #include <memory>
 #include <optional>
 
+#include "conversion_service.hpp"
 #include "game_view.hpp"
-#include "snake_service.hpp"
+#include "score_service.hpp"
 #include "types.hpp"
 
 struct GameController {
@@ -23,6 +24,7 @@ struct GameController {
   GameController(sf::RenderWindow &window);
   void update_direction(Direction direction);
   void start_game();
+  void finish_game();
   void handle_input();
   void update();
   void tick();

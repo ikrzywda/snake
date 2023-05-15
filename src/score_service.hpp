@@ -8,18 +8,14 @@
 #include <string>
 #include <vector>
 
-struct ScoreModel {
-  unsigned int score{0};
-  std::string score_time_string{""};
-
-  std::string serialize_to_string();
-  ScoreModel() = default;
-};
+#include "types.hpp"
 
 struct ScoreService {
   inline static const std::string SCORE_FILE_PATH{".snake/scores.txt"};
   inline static const int MAX_SCORES{10};
-  static bool insert_score(ScoreModel new_score);
+  // TODO break down to get(), update([Scores], new_score) and
+  // scores_to_string()
+  static std::vector<ScoreModel> update_scoreboard(ScoreModel new_score);
 
  private:
   static std::optional<ScoreModel> deserialize_score(std::string score_string);
