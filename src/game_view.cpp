@@ -131,55 +131,85 @@ void DrawingService::draw_menu(sf::RenderWindow &window) {
   window.display();
 }
 
-// generated with gpt-3.5
 void DrawingService::draw_game_over(sf::RenderWindow &window,
-                                    std::string score_string) {
-  sf::View view = window.getDefaultView();
+                                    std::vector<std::string> scores_string) {
+  window.clear();
 
-  sf::Vector2f windowCenter(window.getSize().x / 2.0f,
-                            window.getSize().y / 2.0f);
-  view.setCenter(windowCenter);
+  draw_game_over_header(window);
+  draw_game_over_scoreboard(window, scores_string);
+  draw_game_over_prompt(window);
 
-  float relativeFontSize = window.getSize().y * 0.05f;
-  float relativeSpacing = window.getSize().y * 0.02f;
+  window.display();
+}
+
+void DrawingService::draw_game_over_header(sf::RenderWindow &window) {
+  sf::RectangleShape header(sf::Vector2f(
+      window.getSize().x, window.getSize().y * HEADER_HEIGHT_PERCENTAGE));
+  header.setFillColor(sf::Color::Black);
 
   sf::Font font = SnakeAssets::get_font();
+
+  sf::Text header_text("Game Over", font, 24);
+  header_text.setFillColor(sf::Color::White);
+
+  float text_pos_x =
+      (window.getSize().x - header_text.getLocalBounds().width) / 2.0f;
+  header_text.setPosition(sf::Vector2f(
+      text_pos_x,
+      header.getSize().y / 2 - header_text.getLocalBounds().height / 2));
+
+  window.draw(header);
+  window.draw(header_text);
+}
+
+void DrawingService::draw_game_over_scoreboard(
+    sf::RenderWindow &window, std::vector<std::string> scores_string) {
+  float max_board_height = window.getSize().y * BOARD_HEIGHT_PERCENTAGE;
+  float max_board_width = max_board_height;
+  float board_left = (window.getSize().x - max_board_width) / 2.0f;
+  sf::RectangleShape scoreboard(
+      sf::Vector2f(max_board_width, max_board_height));
+  scoreboard.setPosition(
+      sf::Vector2f(board_left, window.getSize().y * HEADER_HEIGHT_PERCENTAGE));
+  scoreboard.setFillColor(sf::Color::Black);
+
+  sf::Font font = SnakeAssets::get_font();
+
   sf::Text scoresText;
   scoresText.setFont(font);
-  scoresText.setCharacterSize(relativeFontSize);
+  scoresText.setCharacterSize(24);
   scoresText.setFillColor(sf::Color::White);
+  scoresText.setPosition(sf::Vector2f(
+      board_left + 10, window.getSize().y * HEADER_HEIGHT_PERCENTAGE + 10));
 
-  std::istringstream iss(score_string);
-  std::string line;
   std::string scoresDisplay;
-  while (std::getline(iss, line)) {
-    scoresDisplay += line + "\n";
+  for (const auto &score : scores_string) {
+    scoresDisplay += score + "\n";
   }
 
   scoresText.setString(scoresDisplay);
 
-  sf::FloatRect textBounds = scoresText.getLocalBounds();
-  scoresText.setOrigin(sf::Vector2f(textBounds.left + textBounds.width / 2.0f,
-                                    textBounds.top + textBounds.height / 2.0f));
-  scoresText.setPosition(windowCenter);
+  window.draw(scoreboard);
+  window.draw(scoresText);
+}
+
+void DrawingService::draw_game_over_prompt(sf::RenderWindow &window) {
+  sf::Font font = SnakeAssets::get_font();
 
   sf::Text promptText;
   promptText.setFont(font);
-  promptText.setCharacterSize(relativeFontSize);
-  promptText.setFillColor(sf::Color::White);
-  promptText.setString("Press Enter to continue");
-
+  promptText.setCharacterSize(24);
+  promptText.setFillColor(sf::Color::Black);
+  promptText.setString("Press Space to continue");
   sf::FloatRect promptBounds = promptText.getLocalBounds();
   promptText.setOrigin(
       sf::Vector2f(promptBounds.left + promptBounds.width / 2.0f,
                    promptBounds.top + promptBounds.height / 2.0f));
-  promptText.setPosition(
-      sf::Vector2f(windowCenter.x, windowCenter.y + relativeSpacing * 2));
+  promptText.setPosition(sf::Vector2f(
+      window.getSize().x / 2.0f,
+      window.getSize().y *
+              (HEADER_HEIGHT_PERCENTAGE + BOARD_HEIGHT_PERCENTAGE) -
+          promptBounds.height - 10));
 
-  window.clear();
-  window.setView(view);
-  window.draw(scoresText);
   window.draw(promptText);
-
-  window.display();
 }

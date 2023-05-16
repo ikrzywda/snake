@@ -24,7 +24,11 @@ struct DrawingService {
                         GameDrawingBuffer *draw_game_in);
   static void draw_menu(sf::RenderWindow &window);
   static void draw_game_over(sf::RenderWindow &window,
-                             std::string scores_string);
+                             std::vector<std::string> scores_string);
+  static void draw_game_over_header(sf::RenderWindow &window);
+  static void draw_game_over_scoreboard(sf::RenderWindow &window,
+                                        std::vector<std::string> scores_string);
+  static void draw_game_over_prompt(sf::RenderWindow &window);
 
  private:
   static void draw_header(sf::RenderWindow &window, std::string time_string,

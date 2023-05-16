@@ -17,7 +17,8 @@ struct ScoreService {
   static std::vector<ScoreModel> get_scores();
   static bool update_scoreboard(std::vector<ScoreModel> &score_board,
                                 ScoreModel new_score);
-  static std::string scores_to_string(std::vector<ScoreModel> scores);
+  static std::vector<std::string> scores_to_string(
+      std::vector<ScoreModel> scores);
 
  private:
   static std::optional<ScoreModel> deserialize_score(std::string score_string);

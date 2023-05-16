@@ -17,9 +17,8 @@ std::optional<ScoreModel> ScoreService::deserialize_score(
 }
 
 bool ScoreService::init() {
-  std::cout << "DUPA " << ScoreService::SCORE_FILE_PATH << std::endl;
   std::ofstream score_file{ScoreService::SCORE_FILE_PATH,
-                           std::ios::out | std::ios::trunc};
+                           std::ios::out | std::ios::app};
   if (!score_file.is_open()) {
     return false;
   }
@@ -71,10 +70,11 @@ bool ScoreService::update_scoreboard(std::vector<ScoreModel> &scores,
   return write_scores(scores);
 }
 
-std::string ScoreService::scores_to_string(std::vector<ScoreModel> scores) {
-  std::string scores_string = "";
+std::vector<std::string> ScoreService::scores_to_string(
+    std::vector<ScoreModel> scores) {
+  std::vector<std::string> scores_str = {};
   for (auto score : scores) {
-    scores_string += score.serialize_to_string() + '\n';
+    scores_str.push_back(score.serialize_to_string());
   }
-  return scores_string;
+  return scores_str;
 }
