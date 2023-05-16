@@ -1,5 +1,5 @@
-#ifndef GAME_VIEW_HPP
-#define GAME_VIEW_HPP
+#ifndef DRAWING_SERVICE_HPP
+#define DRAWING_SERVICE_HPP
 
 #include <SFML/Graphics.hpp>
 #include <sstream>

@@ -1,4 +1,4 @@
-#include "game_view.hpp"
+#include "drawing_service.hpp"
 
 GameDrawingBuffer::GameDrawingBuffer(m_game_coordinates board_dimensions_in) {
   board_dimensions = board_dimensions_in;

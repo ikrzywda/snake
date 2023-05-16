@@ -1,5 +1,15 @@
 #include "game_model.hpp"
 
+DifficultyModel::DifficultyModel(unsigned int start_speed_in,
+                                 unsigned int speed_increment_in,
+                                 m_game_coordinates board_dimensions_in) {
+  start_speed = start_speed_in;
+  speed_increment = speed_increment_in;
+  board_dimensions = board_dimensions_in;
+}
+
+void DifficultyModel::increase_speed() { start_speed += speed_increment; }
+
 GameModel::GameModel(int board_width, int board_height)
     : snake(std::make_pair(board_width / 2, board_height / 2), Direction::UP) {
   board_dimensions = std::make_pair(board_width, board_height);

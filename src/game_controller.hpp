@@ -7,7 +7,7 @@
 #include <optional>
 
 #include "conversion_service.hpp"
-#include "game_view.hpp"
+#include "drawing_service.hpp"
 #include "score_service.hpp"
 #include "types.hpp"
 
