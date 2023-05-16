@@ -8,7 +8,7 @@
 enum class TileDescriptors { BOARD_TILE, SNAKE_BODY, SNAKE_HEAD, FRUIT };
 
 namespace SnakeAssets {
-  
+
 const std::string FONT_PATH{"assets/Ubuntu-Bold.ttf"};
 sf::RectangleShape get_board_tile(sf::Vector2f position, sf::Vector2f size,
                                   sf::Color color);

@@ -1,10 +1,22 @@
 #include "game_model.hpp"
 
-GameModel::GameModel(int board_width, int board_height)
-    : snake(std::make_pair(board_width / 2, board_height / 2), Direction::UP) {
-  board_dimensions = std::make_pair(board_width, board_height);
+GameModel::GameModel(m_game_coordinates board_dimensions_in)
+    : snake(std::make_pair(board_dimensions_in.first / 2,
+                           board_dimensions_in.second / 2),
+            Direction::UP) {
+  board_dimensions = board_dimensions_in;
   spawn_food();
   start_time = std::chrono::system_clock::now();
+}
+
+void GameModel::update_direction(Direction new_direction) {
+  m_game_coordinates current_direction_vector =
+      ConversionService::direction_to_2d_vector(direction);
+  m_game_coordinates new_direction_vector =
+      ConversionService::direction_to_2d_vector(new_direction);
+  if (current_direction_vector + new_direction_vector != std::make_pair(0, 0)) {
+    direction = new_direction;
+  }
 }
 
 void GameModel::update() {
@@ -24,6 +36,7 @@ void GameModel::update() {
   auto elapsed_seconds =
       std::chrono::duration_cast<std::chrono::seconds>(now - start_time);
   time_seconds = elapsed_seconds.count();
+  snake.move(direction);
 }
 
 void GameModel::spawn_food() {
