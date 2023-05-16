@@ -76,15 +76,18 @@ void DrawingService::draw_board(sf::RenderWindow &window,
           (max_board_height - tile_size * board_dimensions.second) / 2.0f);
 
   for (auto tile : tiles) {
+    auto board_tile = SnakeAssets::shape_factory(
+        TileDescriptors::BOARD_TILE, tile_position, tile_dimensions);
     auto shape =
         SnakeAssets::shape_factory(tile, tile_position, tile_dimensions);
-    if (shape != nullptr) {
-      window.draw(*shape);
-    }
     tile_position.x += tile_size;
     if (tile_position.x >= board_left + max_board_width) {
       tile_position.x = board_left;
       tile_position.y += tile_size;
+    }
+    window.draw(*board_tile);
+    if (shape != nullptr || tile != TileDescriptors::BOARD_TILE) {
+      window.draw(*shape);
     }
   }
 }
