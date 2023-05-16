@@ -1,5 +1,15 @@
 #include "game_controller.hpp"
 
+DifficultyModel::DifficultyModel(unsigned int start_speed_in,
+                                 unsigned int speed_increment_in,
+                                 m_game_coordinates board_dimensions_in) {
+  start_speed = start_speed_in;
+  speed_increment = speed_increment_in;
+  board_dimensions = board_dimensions_in;
+}
+
+void DifficultyModel::increase_speed() { start_speed += speed_increment; }
+
 GameController::GameController(sf::RenderWindow &window) : window(window) {
   last_tick = std::chrono::system_clock::now();
 }

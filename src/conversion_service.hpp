@@ -8,10 +8,10 @@
 
 #include "types.hpp"
 
-struct ConversionService {
-  static m_game_coordinates direction_to_2d_vector(Direction direction);
-  static std::string chrono_timestamp_to_string(
-      std::chrono::time_point<std::chrono::system_clock> timestamp);
-};
+namespace ConversionService {
+m_game_coordinates direction_to_2d_vector(Direction direction);
+std::string chrono_timestamp_to_string(
+    std::chrono::time_point<std::chrono::system_clock> timestamp);
+};  // namespace ConversionService
 
 #endif

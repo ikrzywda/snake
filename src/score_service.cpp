@@ -1,7 +1,8 @@
 #include "score_service.hpp"
 
-std::optional<ScoreModel> ScoreService::deserialize_score(
-    std::string score_string) {
+namespace ScoreService {
+
+std::optional<ScoreModel> deserialize_score(std::string score_string) {
   try {
     std::istringstream iss{score_string};
     ScoreModel score;
@@ -16,9 +17,8 @@ std::optional<ScoreModel> ScoreService::deserialize_score(
   }
 }
 
-bool ScoreService::init() {
-  std::ofstream score_file{ScoreService::SCORE_FILE_PATH,
-                           std::ios::out | std::ios::app};
+bool init() {
+  std::ofstream score_file{SCORE_FILE_PATH, std::ios::out | std::ios::app};
   if (!score_file.is_open()) {
     return false;
   }
@@ -26,8 +26,8 @@ bool ScoreService::init() {
   return true;
 }
 
-std::vector<ScoreModel> ScoreService::get_scores() {
-  std::ifstream score_file{ScoreService::SCORE_FILE_PATH};
+std::vector<ScoreModel> get_scores() {
+  std::ifstream score_file{SCORE_FILE_PATH};
   std::string line;
   std::vector<ScoreModel> scores = {};
 
@@ -46,8 +46,8 @@ std::vector<ScoreModel> ScoreService::get_scores() {
   return scores;
 }
 
-bool ScoreService::write_scores(std::vector<ScoreModel> scores) {
-  std::ofstream score_file{ScoreService::SCORE_FILE_PATH};
+bool write_scores(std::vector<ScoreModel> scores) {
+  std::ofstream score_file{SCORE_FILE_PATH};
   if (!score_file.is_open()) {
     return false;
   }
@@ -59,22 +59,22 @@ bool ScoreService::write_scores(std::vector<ScoreModel> scores) {
   return true;
 }
 
-bool ScoreService::update_scoreboard(std::vector<ScoreModel> &scores,
-                                     ScoreModel new_score) {
+bool update_scoreboard(std::vector<ScoreModel> &scores, ScoreModel new_score) {
   scores.push_back(new_score);
   std::sort(scores.begin(), scores.end(),
             [](ScoreModel a, ScoreModel b) { return a.score > b.score; });
-  if (scores.size() > ScoreService::MAX_SCORES) {
+  if (scores.size() > MAX_SCORES) {
     scores.pop_back();
   }
   return write_scores(scores);
 }
 
-std::vector<std::string> ScoreService::scores_to_string(
-    std::vector<ScoreModel> scores) {
+std::vector<std::string> scores_to_string(std::vector<ScoreModel> scores) {
   std::vector<std::string> scores_str = {};
   for (auto score : scores) {
     scores_str.push_back(score.serialize_to_string());
   }
   return scores_str;
 }
+
+}  // namespace ScoreService

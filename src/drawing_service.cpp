@@ -6,8 +6,10 @@ GameDrawingBuffer::GameDrawingBuffer(m_game_coordinates board_dimensions_in) {
                                        board_dimensions_in.second);
 }
 
-bool DrawingService::update_drawing_buffer(GameDrawingBuffer *draw_game_in,
-                                           GameModel *game_model_in) {
+namespace DrawingService {
+
+bool update_drawing_buffer(GameDrawingBuffer *draw_game_in,
+                           GameModel *game_model_in) {
   draw_game_in->board_dimensions = game_model_in->board_dimensions;
   draw_game_in->time_string =
       "Time: " + std::to_string(game_model_in->time_seconds);
@@ -29,9 +31,8 @@ bool DrawingService::update_drawing_buffer(GameDrawingBuffer *draw_game_in,
   return true;
 }
 
-void DrawingService::draw_header(sf::RenderWindow &window,
-                                 std::string time_string,
-                                 std::string score_string) {
+void draw_header(sf::RenderWindow &window, std::string time_string,
+                 std::string score_string) {
   sf::RectangleShape header(sf::Vector2f(
       window.getSize().x, window.getSize().y * HEADER_HEIGHT_PERCENTAGE));
   header.setFillColor(sf::Color::Black);
@@ -54,9 +55,8 @@ void DrawingService::draw_header(sf::RenderWindow &window,
   window.draw(score_text);
 }
 
-void DrawingService::draw_board(sf::RenderWindow &window,
-                                m_game_coordinates board_dimensions,
-                                std::vector<TileDescriptors> tiles) {
+void draw_board(sf::RenderWindow &window, m_game_coordinates board_dimensions,
+                std::vector<TileDescriptors> tiles) {
   float max_board_height = window.getSize().y * BOARD_HEIGHT_PERCENTAGE;
   float max_board_width =
       max_board_height * board_dimensions.first / board_dimensions.second;
@@ -92,8 +92,7 @@ void DrawingService::draw_board(sf::RenderWindow &window,
   }
 }
 
-void DrawingService::draw_game(sf::RenderWindow &window,
-                               GameDrawingBuffer *draw_game_in) {
+void draw_game(sf::RenderWindow &window, GameDrawingBuffer *draw_game_in) {
   window.clear();
   draw_header(window, draw_game_in->time_string, draw_game_in->score_string);
   draw_board(window, draw_game_in->board_dimensions, draw_game_in->tiles);
@@ -101,7 +100,7 @@ void DrawingService::draw_game(sf::RenderWindow &window,
 }
 
 // generated with gpt-3.5
-void DrawingService::draw_menu(sf::RenderWindow &window) {
+void draw_menu(sf::RenderWindow &window) {
   sf::Font font = SnakeAssets::get_font();
 
   sf::Text title("Snake", font, 48);
@@ -134,8 +133,8 @@ void DrawingService::draw_menu(sf::RenderWindow &window) {
   window.display();
 }
 
-void DrawingService::draw_game_over(sf::RenderWindow &window,
-                                    std::vector<std::string> scores_string) {
+void draw_game_over(sf::RenderWindow &window,
+                    std::vector<std::string> scores_string) {
   window.clear();
 
   draw_game_over_header(window);
@@ -145,7 +144,7 @@ void DrawingService::draw_game_over(sf::RenderWindow &window,
   window.display();
 }
 
-void DrawingService::draw_game_over_header(sf::RenderWindow &window) {
+void draw_game_over_header(sf::RenderWindow &window) {
   sf::RectangleShape header(sf::Vector2f(
       window.getSize().x, window.getSize().y * HEADER_HEIGHT_PERCENTAGE));
   header.setFillColor(sf::Color::Black);
@@ -165,8 +164,8 @@ void DrawingService::draw_game_over_header(sf::RenderWindow &window) {
   window.draw(header_text);
 }
 
-void DrawingService::draw_game_over_scoreboard(
-    sf::RenderWindow &window, std::vector<std::string> scores_string) {
+void draw_game_over_scoreboard(sf::RenderWindow &window,
+                               std::vector<std::string> scores_string) {
   float max_board_height = window.getSize().y * BOARD_HEIGHT_PERCENTAGE;
   float max_board_width = max_board_height;
   float board_left = (window.getSize().x - max_board_width) / 2.0f;
@@ -196,7 +195,7 @@ void DrawingService::draw_game_over_scoreboard(
   window.draw(scoresText);
 }
 
-void DrawingService::draw_game_over_prompt(sf::RenderWindow &window) {
+void draw_game_over_prompt(sf::RenderWindow &window) {
   sf::Font font = SnakeAssets::get_font();
 
   sf::Text promptText;
@@ -216,3 +215,5 @@ void DrawingService::draw_game_over_prompt(sf::RenderWindow &window) {
 
   window.draw(promptText);
 }
+
+}  // namespace DrawingService

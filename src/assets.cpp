@@ -1,8 +1,9 @@
 #include "assets.hpp"
 
-sf::RectangleShape SnakeAssets::get_board_tile(sf::Vector2f position,
-                                               sf::Vector2f size,
-                                               sf::Color color) {
+namespace SnakeAssets {
+
+sf::RectangleShape get_board_tile(sf::Vector2f position, sf::Vector2f size,
+                                  sf::Color color) {
   sf::RectangleShape tile(size);
   tile.setPosition(position);
   tile.setFillColor(color);
@@ -11,9 +12,8 @@ sf::RectangleShape SnakeAssets::get_board_tile(sf::Vector2f position,
   return tile;
 }
 
-sf::RectangleShape SnakeAssets::get_snake_body(sf::Vector2f position,
-                                               sf::Vector2f size,
-                                               sf::Color color) {
+sf::RectangleShape get_snake_body(sf::Vector2f position, sf::Vector2f size,
+                                  sf::Color color) {
   sf::RectangleShape tile(size);
   tile.setPosition(position);
   tile.setFillColor(color);
@@ -22,9 +22,8 @@ sf::RectangleShape SnakeAssets::get_snake_body(sf::Vector2f position,
   return tile;
 }
 
-sf::ConvexShape SnakeAssets::get_snake_head(sf::Vector2f position,
-                                            sf::Vector2f size,
-                                            sf::Color color) {
+sf::ConvexShape get_snake_head(sf::Vector2f position, sf::Vector2f size,
+                               sf::Color color) {
   sf::ConvexShape tile(3);
   tile.setPoint(0, sf::Vector2f(0, 0));
   tile.setPoint(1, sf::Vector2f(size.x, 0));
@@ -34,16 +33,17 @@ sf::ConvexShape SnakeAssets::get_snake_head(sf::Vector2f position,
   return tile;
 }
 
-sf::CircleShape SnakeAssets::get_fruit(sf::Vector2f position, sf::Vector2f size,
-                                       sf::Color color) {
+sf::CircleShape get_fruit(sf::Vector2f position, sf::Vector2f size,
+                          sf::Color color) {
   sf::CircleShape tile(size.x / 2);
   tile.setPosition(position);
   tile.setFillColor(color);
   return tile;
 }
 
-std::unique_ptr<sf::Shape> SnakeAssets::shape_factory(
-    TileDescriptors descriptor, sf::Vector2f position, sf::Vector2f size) {
+std::unique_ptr<sf::Shape> shape_factory(TileDescriptors descriptor,
+                                         sf::Vector2f position,
+                                         sf::Vector2f size) {
   switch (descriptor) {
     case TileDescriptors::BOARD_TILE:
       return std::make_unique<sf::RectangleShape>(
@@ -62,10 +62,12 @@ std::unique_ptr<sf::Shape> SnakeAssets::shape_factory(
   }
 }
 
-sf::Font SnakeAssets::get_font() {
+sf::Font get_font() {
   sf::Font font;
   if (!font.loadFromFile(FONT_PATH)) {
     throw std::runtime_error("Could not load font");
   }
   return font;
 }
+
+}  // namespace SnakeAssets
