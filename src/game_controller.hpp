@@ -40,6 +40,9 @@ struct GameController {
   GameController(sf::RenderWindow &window);
   void start_game(Difficulty selected_difficulty);
   void finish_game();
+  void hanle_menu_input();
+  void handle_game_over_input();
+  void handle_game_input();
   void handle_input();
   void update();
   void tick();

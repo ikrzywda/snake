@@ -4,7 +4,19 @@ GameController::GameController(sf::RenderWindow &window) : window(window) {
   last_tick = std::chrono::system_clock::now();
 }
 
-void GameController::handle_input() {
+void GameController::hanle_menu_input() {
+  if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1)) {
+    difficulty = Difficulty::EASY;
+  } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2)) {
+    difficulty = Difficulty::MEDIUM;
+  } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3)) {
+    difficulty = Difficulty::HARD;
+  } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter)) {
+    start_game(difficulty);
+  }
+}
+
+void GameController::handle_game_input() {
   if (sf::Keyboard::isKeyPressed(sf::Keyboard::H)) {
     game_model->update_direction(Direction::LEFT);
   } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::L)) {
@@ -13,18 +25,28 @@ void GameController::handle_input() {
     game_model->update_direction(Direction::UP);
   } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::J)) {
     game_model->update_direction(Direction::DOWN);
-  } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1)) {
-    difficulty = Difficulty::EASY;
-  } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2)) {
-    difficulty = Difficulty::MEDIUM;
-  } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3)) {
-    difficulty = Difficulty::HARD;
-  } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter)) {
-    if (state == GameState::MENU) {
-      start_game(difficulty);
-    } else if (state == GameState::GAME_OVER) {
-      state = GameState::MENU;
-    }
+  } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
+    finish_game();
+  }
+}
+
+void GameController::handle_game_over_input() {
+  if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter)) {
+    state = GameState::MENU;
+  }
+}
+
+void GameController::handle_input() {
+  switch (state) {
+    case GameState::MENU:
+      hanle_menu_input();
+      break;
+    case GameState::PLAYING:
+      handle_game_input();
+      break;
+    case GameState::GAME_OVER:
+      handle_game_over_input();
+      break;
   }
 }
 
