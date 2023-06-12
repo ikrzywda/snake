@@ -16,15 +16,17 @@ enum class Difficulty { EASY, MEDIUM, HARD };
 struct DifficultyModel {
   unsigned int speed_increment_per_food{1};
   m_game_coordinates board_dimensions;
+  unsigned int min_tick_duration_ms;
+  std::string description;
 };
 
 static std::map<Difficulty, DifficultyModel> DifficultySettingsMap{
-    {Difficulty::EASY, DifficultyModel{5, {20, 20}}},
-    {Difficulty::MEDIUM, DifficultyModel{10, {30, 30}}},
-    {Difficulty::HARD, DifficultyModel{10, {40, 40}}}};
+    {Difficulty::EASY, DifficultyModel{5, {20, 20}, 150, "Easy"}},
+    {Difficulty::MEDIUM, DifficultyModel{10, {30, 30}, 100, "Medium"}},
+    {Difficulty::HARD, DifficultyModel{10, {40, 40}, 75, "Hard"}}};
 
 struct GameController {
-  unsigned int ticks_per_second{1 / 3};
+  unsigned int tick_duration_ms{1 / 3};
   Difficulty difficulty{Difficulty::MEDIUM};
   sf::RenderWindow &window;
   std::unique_ptr<GameModel> game_model;

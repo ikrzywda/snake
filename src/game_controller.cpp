@@ -13,9 +13,15 @@ void GameController::handle_input() {
     game_model->update_direction(Direction::UP);
   } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::J)) {
     game_model->update_direction(Direction::DOWN);
+  } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1)) {
+    difficulty = Difficulty::EASY;
+  } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2)) {
+    difficulty = Difficulty::MEDIUM;
+  } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3)) {
+    difficulty = Difficulty::HARD;
   } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter)) {
     if (state == GameState::MENU) {
-      start_game(Difficulty::MEDIUM);
+      start_game(difficulty);
     } else if (state == GameState::GAME_OVER) {
       state = GameState::MENU;
     }
@@ -48,14 +54,18 @@ void GameController::finish_game() {
 void GameController::update() {
   switch (state) {
     case GameState::MENU:
-      DrawingService::draw_menu(window);
+      DrawingService::draw_menu(window,
+                                DifficultySettingsMap[difficulty].description);
       break;
     case GameState::PLAYING:
       game_model->update();
-      ticks_per_second =
-          300 - game_model.get()->score *
-                    DifficultySettingsMap[difficulty].speed_increment_per_food *
-                    10;
+      tick_duration_ms =
+          tick_duration_ms >
+                  DifficultySettingsMap[difficulty].min_tick_duration_ms
+              ? 300 -
+                    game_model.get()->score * DifficultySettingsMap[difficulty]
+                                                  .speed_increment_per_food
+              : DifficultySettingsMap[difficulty].min_tick_duration_ms;
 
       if (game_model->has_lost) {
         finish_game();
@@ -66,7 +76,6 @@ void GameController::update() {
       DrawingService::draw_game(window, game_drawing_buffer.get());
       break;
     case GameState::GAME_OVER:
-
       break;
   }
 }
@@ -77,7 +86,7 @@ void GameController::tick() {
       std::chrono::duration_cast<std::chrono::milliseconds>(now - last_tick);
   auto elapsed_input = std::chrono::duration_cast<std::chrono::milliseconds>(
       now - last_input_tick);
-  if (elapsed.count() > ticks_per_second) {
+  if (elapsed.count() > tick_duration_ms) {
     last_tick = now;
     update();
   }

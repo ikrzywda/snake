@@ -100,7 +100,7 @@ void draw_game(sf::RenderWindow &window, GameDrawingBuffer *draw_game_in) {
 }
 
 // generated with gpt-3.5
-void draw_menu(sf::RenderWindow &window) {
+void draw_menu(sf::RenderWindow &window, std::string selected_difficulty) {
   sf::Font font = SnakeAssets::get_font();
 
   sf::Text title("Snake", font, 48);
@@ -109,12 +109,25 @@ void draw_menu(sf::RenderWindow &window) {
   title.setPosition(sf::Vector2f(
       window.getSize().x / 2 - title.getGlobalBounds().width / 2, 100));
 
+  sf::Text difficultyText("Selected difficulty:", font, 32);
+  difficultyText.setFillColor(sf::Color::White);
+  difficultyText.setPosition(sf::Vector2f(
+      window.getSize().x / 2 - difficultyText.getGlobalBounds().width / 2,
+      200));
+
+  sf::Text selectedDifficulty(selected_difficulty, font, 32);
+  selectedDifficulty.setFillColor(sf::Color::White);
+  selectedDifficulty.setPosition(sf::Vector2f(
+      window.getSize().x / 2 - selectedDifficulty.getGlobalBounds().width / 2,
+      240));
+
   sf::Text instructions(
-      "Press Enter to start game\n\nUse HJKL for movement\n\nPress Esc to quit",
-      font, 32);
+      "* Press Enter to start game\n* Use HJKL for movement\n* Use keys 1, 2, "
+      "or 3 to select difficulty",
+      font, 25);
   instructions.setFillColor(sf::Color::White);
   instructions.setPosition(sf::Vector2f(
-      window.getSize().x / 2 - instructions.getGlobalBounds().width / 2, 300));
+      window.getSize().x / 2 - instructions.getGlobalBounds().width / 2, 200));
 
   instructions.setLineSpacing(1.5);
   instructions.setFillColor(sf::Color::White);
@@ -129,6 +142,8 @@ void draw_menu(sf::RenderWindow &window) {
 
   window.clear(sf::Color::Black);
   window.draw(title);
+  window.draw(difficultyText);
+  window.draw(selectedDifficulty);
   window.draw(instructions);
   window.display();
 }

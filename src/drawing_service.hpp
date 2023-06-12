@@ -21,7 +21,7 @@ namespace DrawingService {
 bool update_drawing_buffer(GameDrawingBuffer *draw_game_in,
                            GameModel *game_model_in);
 void draw_game(sf::RenderWindow &window, GameDrawingBuffer *draw_game_in);
-void draw_menu(sf::RenderWindow &window);
+void draw_menu(sf::RenderWindow &window, std::string selected_difficulty);
 void draw_game_over(sf::RenderWindow &window,
                     std::vector<std::string> scores_string);
 void draw_game_over_header(sf::RenderWindow &window);
